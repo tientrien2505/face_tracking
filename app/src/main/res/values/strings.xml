@@ -10,4 +10,5 @@
     <string name="string_name_employee">Đào Tiến Trường</string>
     <string name="id_cham_cong">ID chấm công</string>
     <string name="avatar_file_name">avatar.jpg</string>
+    <string name="string_cham_cong">Chấm công</string>
 </resources>

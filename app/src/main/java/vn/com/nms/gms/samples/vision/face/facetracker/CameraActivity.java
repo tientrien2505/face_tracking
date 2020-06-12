@@ -25,6 +25,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.hardware.camera2.CameraDevice;
 import android.os.Bundle;
 //import android.support.design.widget.Snackbar;
 
@@ -34,6 +35,8 @@ import androidx.core.app.ActivityCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -62,35 +65,18 @@ public final class CameraActivity extends AppCompatActivity {
     private GraphicOverlay mGraphicOverlay;
 
     private static final int RC_HANDLE_GMS = 9001;
-    // permission request codes need to be < 256
     private static final int RC_HANDLE_CAMERA_PERM = 2;
     private ImageButton mButtonCamera;
     public static FaceDetector mDetector;
     public static Bitmap mBitmap;
     public static final String BYTES_IMAGE = "BYTES_IMAGE";
-    //==============================================================================================
-    // Activity Methods
-    //==============================================================================================
+    private boolean isChamCong;
+    private RadioGroup radioGroup;
 
-    /**
-     * Initializes the UI and initiates the creation of a face detector.
-     */
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
         setContentView(R.layout.camera_activity);
-
-//        View decorView = getWindow().getDecorView();
-//        decorView.setSystemUiVisibility(
-//                View.SYSTEM_UI_FLAG_IMMERSIVE
-//                        // Set the content to appear under the system bars so that the
-//                        // content doesn't resize when the system bars hide and show.
-////                        | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-////                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-////                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-//                        // Hide the nav bar and status bar
-//                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-//                        | View.SYSTEM_UI_FLAG_FULLSCREEN);
 
         mButtonCamera = findViewById(R.id.button_camera);
         mButtonCamera.setVisibility(View.INVISIBLE);
@@ -102,7 +88,18 @@ public final class CameraActivity extends AppCompatActivity {
         });
         mPreview = (CameraSourcePreview) findViewById(R.id.preview);
         mGraphicOverlay = (GraphicOverlay) findViewById(R.id.faceOverlay);
-
+        radioGroup = findViewById(R.id.radio_group);
+        isChamCong = true;
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                RadioButton radioButton = group.findViewById(checkedId);
+                if (radioButton.isChecked() && radioButton.getText().toString().equalsIgnoreCase(getString(R.string.string_cham_cong)))
+                    isChamCong = true;
+                else
+                    isChamCong = false;
+            }
+        });
         // Check for the camera permission before accessing the camera.  If the
         // permission is not granted yet, request permission.
         int rc = ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA);
@@ -112,6 +109,7 @@ public final class CameraActivity extends AppCompatActivity {
             requestCameraPermission();
         }
     }
+
 
     private void takePicture() {
         mCameraSource.takePicture(null, new CameraSource.PictureCallback() {
@@ -140,7 +138,13 @@ public final class CameraActivity extends AppCompatActivity {
 //                Matrix m = new Matrix();
 //                m.postRotate(90);
 //                mBitmap = Bitmap.createBitmap(mBitmap, 0, 0, mBitmap.getWidth(), mBitmap.getHeight(), m, true);
-
+                if (!isChamCong){
+                    DialogError dialogError = new DialogError(CameraActivity.this);
+                    dialogError.show();
+//                    DialogLoading dialogLoading = new DialogLoading(CameraActivity.this);
+//                    dialogLoading.show();
+                    return;
+                }
                 mBitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
                 float scale = mBitmap.getWidth() / 480;
                 mBitmap = Bitmap.createScaledBitmap(mBitmap, 480, (int)(mBitmap.getHeight()/scale), true);
