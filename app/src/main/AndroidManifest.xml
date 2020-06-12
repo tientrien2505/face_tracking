@@ -11,26 +11,28 @@
 
     <application
         android:allowBackup="true"
-        android:hardwareAccelerated="true"
+        android:hardwareAccelerated="false"
+        android:largeHeap="true"
         android:icon="@drawable/icon"
-        android:theme="@style/Theme.AppCompat"
-        android:label="FaceTracker">
+        android:label="FaceTracker"
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        <activity android:name="vn.com.nms.gms.samples.vision.face.facetracker.TraCuuActivity"></activity>
 
-        <meta-data android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version"/>
-
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
         <meta-data
             android:name="com.google.android.gms.vision.DEPENDENCIES"
             android:value="face" />
 
         <activity
-            android:name="com.google.android.gms.samples.vision.face.facetracker.FaceTrackerActivity"
+            android:name="vn.com.nms.gms.samples.vision.face.facetracker.CameraActivity"
             android:icon="@drawable/icon"
-            android:label="Face Tracker"
+            android:label="NMS FACE ID"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.NoActionBar">
-<!--            android:screenOrientation="fullSensor"-->
 
+            <!-- android:screenOrientation="fullSensor" -->
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

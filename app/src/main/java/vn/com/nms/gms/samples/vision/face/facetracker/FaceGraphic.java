@@ -13,15 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.android.gms.samples.vision.face.facetracker;
+package vn.com.nms.gms.samples.vision.face.facetracker;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.view.View;
-import android.widget.ImageButton;
 
-import com.google.android.gms.samples.vision.face.facetracker.ui.camera.GraphicOverlay;
+import vn.com.nms.gms.samples.vision.face.facetracker.ui.camera.GraphicOverlay;
 import com.google.android.gms.vision.face.Face;
 
 /**
@@ -119,6 +117,6 @@ class FaceGraphic extends GraphicOverlay.Graphic {
         float top = y - yOffset;
         float right = x + xOffset;
         float bottom = y + yOffset;
-        canvas.drawRect(left, top, right, bottom, mBoxPaint);
+//        canvas.drawRect(left, top, right, bottom, mBoxPaint);
     }
 }

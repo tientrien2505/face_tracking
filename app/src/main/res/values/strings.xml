@@ -4,4 +4,10 @@
     <string name="permission_camera_rationale">Access to the camera is needed for detection</string>
     <string name="no_camera_permission">This application cannot run because it does not have the camera permission.  The application will now exit.</string>
     <string name="low_storage_error">Face detector dependencies cannot be downloaded due to low device storage</string>
+    <string name="string_date">Thứ bảy, ngày 25, tháng 05, năm 2020</string>
+    <string name="string_checkin">Giờ vào: 8h30\'</string>
+    <string name="string_checkout">Giờ ra: 18h00\'</string>
+    <string name="string_name_employee">Đào Tiến Trường</string>
+    <string name="id_cham_cong">ID chấm công</string>
+    <string name="avatar_file_name">avatar.jpg</string>
 </resources>

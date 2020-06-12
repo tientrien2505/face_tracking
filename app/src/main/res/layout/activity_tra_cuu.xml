@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="vn.com.nms.gms.samples.vision.face.facetracker.TraCuuActivity">
+
+    <TableLayout
+        android:id="@+id/table_info"
+        android:layout_width="match_parent"
+        android:padding="10dp"
+        android:stretchColumns="*"
+        android:layout_height="wrap_content">
+
+        <TableRow>
+
+            <LinearLayout
+                android:layout_height="match_parent"
+                android:layout_width="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:textSize="24sp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/string_name_employee" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:textSize="24sp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/id_cham_cong" />
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/image_view_avatar"
+                android:layout_gravity="right"
+                android:src="@drawable/button_camera"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </TableRow>
+    </TableLayout>
+
+    <TableLayout
+        android:id="@+id/table_time"
+        android:layout_below="@+id/table_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="32dp"
+        android:stretchColumns="*">
+
+        <TableRow>
+
+            <ImageButton
+                android:id="@+id/prev_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:onClick="prevMonth"
+                app:srcCompat="@drawable/prev_enable" />
+
+            <TextView
+                android:id="@+id/time_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tháng 5, 2020"
+                android:textSize="24sp" />
+
+            <ImageButton
+                android:id="@+id/next_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:onClick="nextMonth"
+                app:srcCompat="@drawable/next_enable" />
+        </TableRow>
+
+    </TableLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/table_time"
+        android:padding="10dp" />
+</RelativeLayout>

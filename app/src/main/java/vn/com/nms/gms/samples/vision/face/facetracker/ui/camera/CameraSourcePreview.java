@@ -13,8 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.android.gms.samples.vision.face.facetracker.ui.camera;
+package vn.com.nms.gms.samples.vision.face.facetracker.ui.camera;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.util.AttributeSet;
@@ -80,7 +81,7 @@ public class CameraSourcePreview extends ViewGroup {
             mCameraSource = null;
         }
     }
-
+    @SuppressLint("MissingPermission")
     private void startIfReady() throws IOException {
         if (mStartRequested && mSurfaceAvailable) {
             mCameraSource.start(mSurfaceView.getHolder());

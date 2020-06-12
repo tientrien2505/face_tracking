@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.android.gms.samples.vision.face.facetracker;
+package vn.com.nms.gms.samples.vision.face.facetracker;
 
 import android.Manifest;
 import android.app.Activity;
@@ -21,7 +21,10 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 //import android.support.design.widget.Snackbar;
 
@@ -30,21 +33,18 @@ import androidx.core.app.ActivityCompat;
 //import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
-import android.widget.RadioGroup;
-import android.widget.RelativeLayout;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.common.images.Size;
+import com.google.android.gms.samples.vision.face.facetracker.R;
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.MultiProcessor;
 import com.google.android.gms.vision.Tracker;
 import com.google.android.gms.vision.face.Face;
 import com.google.android.gms.vision.face.FaceDetector;
-import com.google.android.gms.samples.vision.face.facetracker.ui.camera.CameraSourcePreview;
-import com.google.android.gms.samples.vision.face.facetracker.ui.camera.GraphicOverlay;
+import vn.com.nms.gms.samples.vision.face.facetracker.ui.camera.CameraSourcePreview;
+import vn.com.nms.gms.samples.vision.face.facetracker.ui.camera.GraphicOverlay;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.io.IOException;
@@ -53,7 +53,7 @@ import java.io.IOException;
  * Activity for the face tracker app.  This app detects faces with the rear facing camera, and draws
  * overlay graphics to indicate the position, size, and ID of each face.
  */
-public final class FaceTrackerActivity extends AppCompatActivity {
+public final class CameraActivity extends AppCompatActivity {
     private static final String TAG = "FaceTracker";
 
     private CameraSource mCameraSource = null;
@@ -65,6 +65,9 @@ public final class FaceTrackerActivity extends AppCompatActivity {
     // permission request codes need to be < 256
     private static final int RC_HANDLE_CAMERA_PERM = 2;
     private ImageButton mButtonCamera;
+    public static FaceDetector mDetector;
+    public static Bitmap mBitmap;
+    public static final String BYTES_IMAGE = "BYTES_IMAGE";
     //==============================================================================================
     // Activity Methods
     //==============================================================================================
@@ -75,10 +78,28 @@ public final class FaceTrackerActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
-        setContentView(R.layout.main);
+        setContentView(R.layout.camera_activity);
+
+//        View decorView = getWindow().getDecorView();
+//        decorView.setSystemUiVisibility(
+//                View.SYSTEM_UI_FLAG_IMMERSIVE
+//                        // Set the content to appear under the system bars so that the
+//                        // content doesn't resize when the system bars hide and show.
+////                        | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+////                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+////                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+//                        // Hide the nav bar and status bar
+//                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+//                        | View.SYSTEM_UI_FLAG_FULLSCREEN);
 
         mButtonCamera = findViewById(R.id.button_camera);
         mButtonCamera.setVisibility(View.INVISIBLE);
+        mButtonCamera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                takePicture();
+            }
+        });
         mPreview = (CameraSourcePreview) findViewById(R.id.preview);
         mGraphicOverlay = (GraphicOverlay) findViewById(R.id.faceOverlay);
 
@@ -90,6 +111,48 @@ public final class FaceTrackerActivity extends AppCompatActivity {
         } else {
             requestCameraPermission();
         }
+    }
+
+    private void takePicture() {
+        mCameraSource.takePicture(null, new CameraSource.PictureCallback() {
+            @Override
+            public void onPictureTaken(byte[] bytes) {
+//                mBitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+
+
+//                int right = left + (int)face.getWidth();
+//                int bottom = top + (int)face.getHeight();
+//                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//                if (!yuvImage.compressToJpeg(new Rect(left, top, right, bottom), 80, baos))
+//                    return;
+//                byte[] jpgArray = baos.toByteArray();
+////                bmp = BitmapFactory.decodeByteArray(jpgArray, 0,jpgArray.length);
+//                try {
+//                    FileOutputStream fileImage = new FileOutputStream(getString(R.string.avatar_file_name));
+//                    fileImage.write(jpgArray);
+//                } catch (FileNotFoundException e) {
+//                    e.printStackTrace();
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+
+//                Log.d("TRUONG", "camerasource takes picture");
+//                Matrix m = new Matrix();
+//                m.postRotate(90);
+//                mBitmap = Bitmap.createBitmap(mBitmap, 0, 0, mBitmap.getWidth(), mBitmap.getHeight(), m, true);
+
+                mBitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                float scale = mBitmap.getWidth() / 480;
+                mBitmap = Bitmap.createScaledBitmap(mBitmap, 480, (int)(mBitmap.getHeight()/scale), true);
+                if (mBitmap == null) {
+                    Log.d("TRUONG", "null");
+                }
+                Intent intent = new Intent(CameraActivity.this, TraCuuActivity.class);
+//                intent.putExtra(BYTES_IMAGE, bytes);
+                startActivity(intent);
+            }
+        });
+
     }
 
     /**
@@ -132,15 +195,15 @@ public final class FaceTrackerActivity extends AppCompatActivity {
     private void createCameraSource() {
 
         Context context = getApplicationContext();
-        FaceDetector detector = new FaceDetector.Builder(context)
+        mDetector = new FaceDetector.Builder(context)
                 .setClassificationType(FaceDetector.ALL_CLASSIFICATIONS)
                 .build();
 
-        detector.setProcessor(
+        mDetector.setProcessor(
                 new MultiProcessor.Builder<>(new GraphicFaceTrackerFactory())
                         .build());
 
-        if (!detector.isOperational()) {
+        if (!mDetector.isOperational()) {
             // Note: The first time that an app using face API is installed on a device, GMS will
             // download a native library to the device in order to do detection.  Usually this
             // completes before the app is run for the first time.  But if that download has not yet
@@ -152,7 +215,7 @@ public final class FaceTrackerActivity extends AppCompatActivity {
             Log.w(TAG, "Face detector dependencies are not yet available.");
         }
 
-        mCameraSource = new CameraSource.Builder(context, detector)
+        mCameraSource = new CameraSource.Builder(context, mDetector)
                 .setRequestedPreviewSize(640, 480)
                 .setFacing(CameraSource.CAMERA_FACING_FRONT)
                 .setRequestedFps(30.0f)
